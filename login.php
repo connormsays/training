@@ -43,6 +43,7 @@ if(isset($_POST['submit']))
 {
 $username = $mysqli->real_escape_string($_POST['username']);
 $password = $mysqli->real_escape_string($_POST['password']);
+$password = $site->encryptPassword($username, $password);
 
 $sql = "SELECT * FROM users where email='$username' AND password='$password'";
 $res = $mysqli->query($sql);

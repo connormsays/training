@@ -65,7 +65,7 @@ if($_SESSION['userID'] != "")
     $cid = $customer->id;
     if($cid != "")
     {
-      $SQL = "INSERT INTO users(`username`, `password`, `firstName`, `lastName`, `stripeCustomer`, `addr1`, `addr2`, `addr3`, `town`, `county`, `postcode`, `mobile`) VALUES ('$email', '$pass', '$fname', '$lname', '$cid', '$addr1', '$addr2', '$addr3', '$town', '$county', '$postcode', '$mobile');";
+      $SQL = "INSERT INTO users(`email`, `password`, `firstName`, `lastName`, `stripeCustomer`, `addr1`, `addr2`, `addr3`, `town`, `county`, `postcode`, `mobile`) VALUES ('$email', '$pass', '$fname', '$lname', '$cid', '$addr1', '$addr2', '$addr3', '$town', '$county', '$postcode', '$mobile');";
       $res = $mysqli->query($SQL);
       if($res)
       {
@@ -76,6 +76,10 @@ if($_SESSION['userID'] != "")
         <strong>Welcome! </strong> You are successfully registered, welcome to the family.
         </div>
         <?php
+      }
+      else
+      {
+        echo $mysqli->error;
       }
 
     }

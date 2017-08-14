@@ -16,6 +16,35 @@ $cid = $mysqli->real_escape_string($_GET['cid']);
 			<div class='row'>
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 				<?php
+				if(isset($_POST['number']))
+				{
+					if($_POST['stripeToken'] == "")
+					{
+						echo "<div class=\"alert alert-danger\">
+							<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>
+							<strong>Ooops!</strong> Something went wrong
+						</div>";
+					}
+					else
+					{
+						$name = $mysqli->real_escape_string($_POST['name']);
+						$card = $mysqli->real_escape_string($_POST['number']);
+						$exp_month = $mysqli->real_escape_string($_POST['exp_month']);
+						$exp_year = $mysqli->real_escape_string($_POST['exp_year']);
+						$cvc = $mysqli->real_escape_string($_POST['cvc']);
+						$amount = $mysqli->real_escape_string($_POST['amount']);
+
+						$charge = \Stripe\Charge::create(array(
+						  "amount" => $amount,
+						  "currency" => "gbp",
+						  "source" => $token, // obtained with Stripe.js
+						  "description" => "Isograph.com Training Course Charge"
+						));
+
+						var_dump($charge);
+					}
+				}
+				var_dump($_POST);
 				if ($cid == "")
 				{
 					die("Invalid parameters");
@@ -27,9 +56,15 @@ $cid = $mysqli->real_escape_string($_GET['cid']);
 					echo $mysqli->error;
 				}
 				$row = $res->fetch_assoc();
+
+
+
+
+
+
 				?>
 				<div class="row">
-					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+					<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 						<div class='boxTitle'>
 							Order Details
 						</div>
@@ -38,7 +73,17 @@ $cid = $mysqli->real_escape_string($_GET['cid']);
 							<?php echo $row['description']; ?>
 						</div>
 					</div>
-					<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+					<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+						<div class='boxTitle'>
+							Pricing Information
+						</div>
+						<div class='infoBox'>
+							<strong>1 X <?php echo $row['name']; ?></strong> <span class='orderPrice'><?php echo $site->getSetting('currency') . $row['price']; ?></span>
+							<hr />
+							<strong>Order Total</strong> <span class='orderPrice'><?php echo $site->getSetting('currency') . $row['price']; ?></span>
+						</div>
+					</div>
+					<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
 						<div class='boxTitle'>
 							Payment Information
 						</div>
@@ -47,37 +92,42 @@ $cid = $mysqli->real_escape_string($_GET['cid']);
 						<div class='infoBox payment'>
 						<input type='radio' name='payment[]' id='card' /> Credit / Debit Card<br />
 						<div class='creditCardPayment' style="display: none;">
-						<form action="" method="POST" role="form">
+						<div class="payment-errors" style="display:none;">
+							
+							
+						</div>
+						<form action="purchase.php" method="POST" role="form" id='payment-form'>
 						<div class="form-group">
 								<label for="Name">Name on Card</label>
-								<input type="text" class="form-control" id="cardName" name='name' required>
+								<input type="text" class="form-control" id="cardName" name='name' data-stripe="name" required>
 							</div>
 							<div class="form-group">
 								<label for="number">Card Number</label>
-								<input type="text" class="form-control" id="cardNum" name='number' required>
+								<input type="text" class="form-control" id="cardNum" name='number' data-stripe="number" required>
 							</div>
 							<div class='row'>
 							<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 								<div class="form-group">
 								<label for="exp_month">Expiry Month</label>
-								<input type="text" class="form-control" id="cardMonth" name='exp_month' required>
+								<input type="text" class="form-control" id="cardMonth" name='exp_month' data-stripe="exp_month" required>
 							</div>
 							</div>
 							<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 								<div class="form-group">
 								<label for="exp_year">Expiry Year</label>
-								<input type="text" class="form-control" id="cardYear" name="exp_year" required>
+								<input type="text" class="form-control" id="cardYear" name="exp_year" data-stripe="exp_year" required>
 							</div>
 							</div>
 							</div>
 							<div class="form-group">
 								<label for="cvc">CVC Code</label>
-								<input type="text" class="form-control" id="cardCVC" name='cvc' required>
+								<input type="text" class="form-control" id="cardCVC" name='cvc' data-stripe="cvc" required>
+								<input type='hidden' name='price' value='<?php echo $row['price'];?>' />
 							</div>
 						
 							
 						
-							<button type="submit" class="btn btn-primary">Submit</button>
+							<input type="submit" id='submit_form' name='submit_form' class="btn btn-primary" value='Pay Now' />
 						</form>
 						</div>
 						</div>
@@ -99,6 +149,7 @@ $cid = $mysqli->real_escape_string($_GET['cid']);
 	</div>
 </div>
         <!-- /page content -->
+        <script src="https://js.stripe.com/v2/"></script>
         <script
   src="https://code.jquery.com/jquery-3.2.1.js"
   integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
@@ -123,6 +174,14 @@ $cid = $mysqli->real_escape_string($_GET['cid']);
         	});
 
         </script>
+
+<script type="text/javascript" src='./build/js/stripe.js'></script>
+
+<script type="text/javascript">
+Stripe.setPublishableKey('<?php echo $site->getSetting('stripe_publish'); ?>');
+</script>
+
+
 
 <?php
 $site->foot();

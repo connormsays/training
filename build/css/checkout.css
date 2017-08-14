@@ -43,6 +43,11 @@
   -webkit-animation: dash 2s ease-in-out;
 }
 
+.orderPrice
+{
+  float:right;
+}
+
 .spin {
   animation: spin 2s;
   -webkit-animation: spin 2s;
