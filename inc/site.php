@@ -1,11 +1,13 @@
 <?php
 session_start();
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
+require(__DIR__.'./stripe/init.php');
 
 class site
 {
 	function top($title)
 	{
+    \Stripe\Stripe::setApiKey($this->getSetting('stripe_secret'));
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -26,7 +28,10 @@ class site
     <link href="./vendors/nprogress/nprogress.css" rel="stylesheet">
     <!-- iCheck -->
     <link href="./vendors/iCheck/skins/flat/green.css" rel="stylesheet">
-
+<script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous"></script>
     <!-- Custom Theme Style -->
     <link href="./build/css/custom.min.css" rel="stylesheet">
   </head>
@@ -131,6 +136,41 @@ function foot()
 	<?php
 
 }
+
+function isLoggedIn()
+{
+  if($_SESSION['username'] != "")
+  {
+    return true;
+  }else
+  {
+    return false;
+  }
+}
+
+function getUsername()
+{
+  if($this->isLoggedIn())
+  {
+  return $_SESSION['username'];
+  }
+}
+function getSetting($settingName)
+{
+  require('./inc/db.php');
+  $sql = "SELECT * FROM settings WHERE name ='$settingName'";
+  $res = $mysqli->query($sql);
+  $row = $res->fetch_assoc();
+  return $row['value'];
+}
+
+  function encryptPassword($username, $pass)
+  {
+    $salt = sha1($username);
+    $pass = sha1($pass);
+    $pass2 = sha1($salt . $pass);
+    return $pass2;
+  }
 
 
 }

@@ -1,5 +1,9 @@
 <?php
 require('./inc/site.php');
+if(!$site->isLoggedIn())
+{
+header("Location: login.php");
+}
 $site->top("Test");
 ?>
 <!-- page content -->

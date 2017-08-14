@@ -58,6 +58,7 @@ if($res)
    </div>";
   }else{
     $_SESSION['username'] = $row['email'];
+    header("Location: index.php");
   }
 
 }else{
