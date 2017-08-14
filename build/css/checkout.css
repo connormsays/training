@@ -1,0 +1,115 @@
+.infoBox
+{
+	background-color: #FFF;
+	border: solid 1px #CDCDCD;
+	padding: 15px;
+}
+.boxTitle
+{
+	border-left: solid 1px #CDCDCD;
+	border-right: solid 1px #CDCDCD;
+	border-top: solid 3px #2A3F54;
+	background-color: #F6F6F6;
+	color: #000;
+	padding: 15px;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.courseTitle
+{
+	color: #000;
+	font-weight: BOLD;
+}
+
+.payment
+{
+	color: #000;
+	margin-bottom: 5px;
+}
+
+
+.checkmark {
+  width: 200px;
+  margin: 0 auto;
+  padding-top: 40px;
+  color: #2A3F54;
+}
+
+.path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 0;
+  animation: dash 2s ease-in-out;
+  -webkit-animation: dash 2s ease-in-out;
+}
+
+.spin {
+  animation: spin 2s;
+  -webkit-animation: spin 2s;
+  transform-origin: 50% 50%;
+  -webkit-transform-origin: 50% 50%;
+
+}
+
+p {
+  font-family: sans-serif;
+  color: #2A3F54;
+  font-size: 30px;
+  font-weight: bold;
+  margin: 20px auto;
+  text-align: center;
+  animation: text .5s linear .4s;
+  -webkit-animation: text .4s linear .3s;
+}
+
+@-webkit-keyframes dash {
+ 0% {
+   stroke-dashoffset: 1000;
+ }
+ 100% {
+   stroke-dashoffset: 0;
+ }
+}
+
+@keyframes dash {
+ 0% {
+   stroke-dashoffset: 1000;
+ }
+ 100% {
+   stroke-dashoffset: 0;
+ }
+}
+
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@-webkit-keyframes text {
+  0% {
+    opacity: 0; }
+  100% {
+    opacity: 1;
+  }
+
+  
+  @keyframes text {
+  0% {
+    opacity: 0; }
+  100% {
+    opacity: 1;
+  }
+}
