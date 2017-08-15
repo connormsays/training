@@ -27,21 +27,29 @@ $cid = $mysqli->real_escape_string($_GET['cid']);
 					}
 					else
 					{
+						$token = $mysqli->real_escape_string($_POST['stripeToken']);
 						$name = $mysqli->real_escape_string($_POST['name']);
 						$card = $mysqli->real_escape_string($_POST['number']);
 						$exp_month = $mysqli->real_escape_string($_POST['exp_month']);
 						$exp_year = $mysqli->real_escape_string($_POST['exp_year']);
 						$cvc = $mysqli->real_escape_string($_POST['cvc']);
-						$amount = $mysqli->real_escape_string($_POST['amount']);
+						$amount = $mysqli->real_escape_string($_POST['amount']) * 100;
+						
+						try{
 
 						$charge = \Stripe\Charge::create(array(
 						  "amount" => $amount,
 						  "currency" => "gbp",
 						  "source" => $token, // obtained with Stripe.js
 						  "description" => "Isograph.com Training Course Charge"
+						  
 						));
 
 						var_dump($charge);
+					} catch (Exception $ex)
+					{
+						echo $ex;
+					}
 					}
 				}
 				var_dump($_POST);
@@ -122,7 +130,7 @@ $cid = $mysqli->real_escape_string($_GET['cid']);
 							<div class="form-group">
 								<label for="cvc">CVC Code</label>
 								<input type="text" class="form-control" id="cardCVC" name='cvc' data-stripe="cvc" required>
-								<input type='hidden' name='price' value='<?php echo $row['price'];?>' />
+								<input type='hidden' name='amount' value='<?php echo $row['price'];?>' />
 							</div>
 						
 							

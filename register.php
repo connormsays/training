@@ -79,7 +79,7 @@ if($_SESSION['userID'] != "")
       }
       else
       {
-        echo $mysqli->error;
+        echo $mysqli->error . "Test";
       }
 
     }
