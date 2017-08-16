@@ -1,7 +1,7 @@
 <?php
 require('./inc/site.php');
 require('./inc/db.php');
-$site->top("Test");
+$site->top("Purchase a new course");
 $cid = $mysqli->real_escape_string($_GET['cid']);
 ?>
 <link rel="stylesheet" type="text/css" href="./build/css/checkout.css">
@@ -27,6 +27,15 @@ $cid = $mysqli->real_escape_string($_GET['cid']);
 					}
 					else
 					{
+						$sql = "SELECT * FROM users WHERE email = '{$_SESSION['username']}'";
+						
+						$res = $mysqli->query($sql);
+						if(!$res)
+						{
+							echo $mysqli->error;
+						}
+						$row = $res->fetch_assoc();
+						$cust = $row['stripeCustomer'];
 						$token = $mysqli->real_escape_string($_POST['stripeToken']);
 						$name = $mysqli->real_escape_string($_POST['name']);
 						$card = $mysqli->real_escape_string($_POST['number']);
@@ -34,25 +43,48 @@ $cid = $mysqli->real_escape_string($_GET['cid']);
 						$exp_year = $mysqli->real_escape_string($_POST['exp_year']);
 						$cvc = $mysqli->real_escape_string($_POST['cvc']);
 						$amount = $mysqli->real_escape_string($_POST['amount']) * 100;
+						$cid = $mysqli->real_escape_string($_POST['cid']);
 						
 						try{
+							echo "Please wait...";
+							$customer = \Stripe\Customer::retrieve($cust);
+							$card = $customer->sources->create(array("source" => $token));
+
+						
+							
+						
 
 						$charge = \Stripe\Charge::create(array(
 						  "amount" => $amount,
 						  "currency" => "gbp",
-						  "source" => $token, // obtained with Stripe.js
+						  "source" => $customer->default_source, // obtained with Stripe.js,
+						  "customer" => $cust,
 						  "description" => "Isograph.com Training Course Charge"
 						  
 						));
 
-						var_dump($charge);
+						if($charge->id != "")
+						{
+							if($_POST['save'] != "on")
+							{
+							$customer->sources->retrieve($card->id)->delete();
+							}
+							$date = date('l jS \of F Y');
+							$sql = "INSERT INTO orders (id, username, courseID, stripe_charge, purchase_date) VALUES (NULL, '{$_SESSION['username']}', '$cid', '$charge->id', '$date')";
+							if(!$mysqli->query($sql))
+							{
+								echo $mysqli->error;
+							}
+							echo "<meta http-equiv=\"refresh\" content=\"0; url=complete.php\" />";
+						}
+						
 					} catch (Exception $ex)
 					{
 						echo $ex;
 					}
 					}
 				}
-				var_dump($_POST);
+				
 				if ($cid == "")
 				{
 					die("Invalid parameters");
@@ -131,8 +163,11 @@ $cid = $mysqli->real_escape_string($_GET['cid']);
 								<label for="cvc">CVC Code</label>
 								<input type="text" class="form-control" id="cardCVC" name='cvc' data-stripe="cvc" required>
 								<input type='hidden' name='amount' value='<?php echo $row['price'];?>' />
+								<input type='hidden' name='cid' value='<?php echo $cid; ?>' />
 							</div>
-						
+						<div class="form-group">
+						<input type='checkbox' name='save' /> Save payment method
+						</div>
 							
 						
 							<input type="submit" id='submit_form' name='submit_form' class="btn btn-primary" value='Pay Now' />

@@ -1,7 +1,7 @@
 <?php
 require('./inc/site.php');
 require('./inc/db.php');
-$site->top("Test");
+$site->top("Purchase a new course");
 ?>
 <!-- page content -->
 <div class="right_col" role="main">

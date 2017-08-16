@@ -49,9 +49,9 @@ class site
 
             <!-- menu profile quick info -->
             <div class="profile clearfix">
-              <div class="profile_pic">
+              <!--<div class="profile_pic">
                 <img src="images/img.jpg" alt="..." class="img-circle profile_img">
-              </div>
+              </div>-->
               <div class="profile_info">
                 <span>Welcome,</span>
                 <h2><?php echo $_SESSION['username']; ?></h2>
@@ -75,6 +75,13 @@ class site
 
                     </ul>
                   </li>
+                  <li><a><i class="fa fa-user"></i> Manage Account <span class="fa fa-chevron-down"></span></a>
+                  <ul class="nav child_menu">
+                      <li><a href="account.php?act=info">Update Details</a></li>
+                      <li><a href="account.php?act=pass">Change Password</a></li>
+                      <li><a href="account.php?act=billing">View billing information</a></li>
+
+                    </ul></li>
                   
 
                 </ul>
@@ -157,7 +164,7 @@ function getUsername()
 }
 function getSetting($settingName)
 {
-  require('./inc/db.php');
+  require(__DIR__.'/db.php');
   $sql = "SELECT * FROM settings WHERE name ='$settingName'";
   $res = $mysqli->query($sql);
   $row = $res->fetch_assoc();

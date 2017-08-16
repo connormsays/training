@@ -1,6 +1,8 @@
 <?php
 //Admin configuration page
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
 require('../inc/db.php');
+session_start();
 
 
 class admin
@@ -10,6 +12,11 @@ class admin
 	{
 		$siteName = $this->getSetting('siteName');
 		$first_part = basename($_SERVER['PHP_SELF'], ".php");
+    if($_SESSION['staffName'] != "")
+    {
+      header("Location: login.php");
+    }
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -380,7 +387,10 @@ class admin
 <!-- REQUIRED JS SCRIPTS -->
 
 <!-- jQuery 3 -->
-<script src="bower_components/jquery/dist/jquery.min.js"></script>
+        <script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous"></script>
 <!-- Bootstrap 3.3.7 -->
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <!-- AdminLTE App -->
