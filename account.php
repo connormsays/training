@@ -147,8 +147,8 @@ $act = $_GET['act'];
 							$i = 0;
 							foreach($card->data as $item) {
 								?>
-								<div class='cardBox'>
-							<img src='./images/cards/<?php echo $item->brand; ?>.png' alt='<?php echo $item->brand; ?>' title='<?php echo $item->brand; ?>' /> <?php echo "Ending in " . $item->last4; ?> <span style='float:right;'><button type="button" class="btn btn-danger">Delete</button><?php if($i != '0'){echo '<button type="button" class="btn btn-success default" id="" data-card="'.$item->id.'">Make Default</button>'; } $i++;?></span></div>
+								<div class='cardBox <?php if($i == 0) {echo 'defaultCard'; } ?> '> <?php if($i == 0) {echo '<div class="defaultCardText">Default Card</div><br />'; } ?>
+							<img src='./images/cards/<?php echo $item->brand; ?>.png' alt='<?php echo $item->brand; ?>' title='<?php echo $item->brand; ?>' /> <?php echo "Ending in " . $item->last4; ?> <span style='float:right;'><button type="button" class="btn btn-danger delete" <?php echo 'data-card="'.$item->id.'"'; ?>>Delete</button><?php if($i != '0'){echo '<button type="button" class="btn btn-success default" id="" data-card="'.$item->id.'">Make Default</button>'; } $i++;?></span></div>
 
 					
 								<?php
@@ -172,8 +172,15 @@ $site->foot();
 ?>
 <script type="text/javascript">
 	$('.default').click(function(){
-		$(this).html("<img src='./images/loading.gif' width='50px'/>");
+		$(this).html("<img src='./images/loading.gif' height='20px'/>            ");
 		$.post('./inc/ajax/default.php', {act: 'change', customer: '<?php echo $row['stripeCustomer'];?>',card: $(this).data("card")}, function(data){
+		console.log(data);
+		location.reload();
+	});
+	});
+		$('.delete').click(function(){
+		$(this).html("<img src='./images/loading.gif' height='20px'/>            ");
+		$.post('./inc/ajax/default.php', {act: 'delete', customer: '<?php echo $row['stripeCustomer'];?>',card: $(this).data("card")}, function(data){
 		console.log(data);
 		location.reload();
 	});

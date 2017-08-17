@@ -30,11 +30,23 @@
 	color: #000;
 	font-weight: BOLD;
 }
+.defaultCard
+{
+border:solid 1px #2A3F54; 
+font-size: 12px;
+}
 
 .payment
 {
 	color: #000;
 	margin-bottom: 5px;
+}
+
+.defaultCardText
+{
+  color: #BABABA;
+  margin-top: -10px;
+  margin-bottom: -20px;
 }
 
 

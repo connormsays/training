@@ -236,21 +236,10 @@ class admin
         <div class="pull-left info">
           <p>Alexander Pierce</p>
           <!-- Status -->
-          <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
+
         </div>
       </div>
 
-      <!-- search form (Optional) -->
-      <form action="#" method="get" class="sidebar-form">
-        <div class="input-group">
-          <input type="text" name="q" class="form-control" placeholder="Search...">
-          <span class="input-group-btn">
-              <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
-              </button>
-            </span>
-        </div>
-      </form>
-      <!-- /.search form -->
 
       <!-- Sidebar Menu -->
       <ul class="sidebar-menu" data-widget="tree">
@@ -269,6 +258,9 @@ class admin
             <li><a href="#">Link in level 2</a></li>
           </ul>
         </li>
+                <li class="header">Courses</li>
+        <li class='<?php if ($first_part=="newcourse") {echo "active"; } ?>'><a href="newcourse.php"><i class="fa fa-plus"></i> <span>Create a Course</span></a></li>
+        <li class='<?php if ($first_part=="managecourse") {echo "active"; } ?>'><a href="managecourse.php"><i class="fa fa-pencil-square-o"></i> <span>Manage Courses</span></a></li>
          <li class="header">Settings</li>
           <li class='<?php if ($first_part=="settings") {echo "active"; } ?>'><a href="settings.php"><i class="fa fa-cog"></i> <span>System Settings</span></a></li>
       </ul>
@@ -423,6 +415,17 @@ public function update_option($optionName, $value)
 	}
 }
 
+function isloggedin()
+{
+  if($_SESSION['staffName'] == "")
+  {
+    return false;
+  }
+  else
+  {
+    return true;
+  }
+}
 
 
 
