@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.6.5.2
+-- version 4.6.4
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 14, 2017 at 11:26 PM
--- Server version: 10.1.21-MariaDB
--- PHP Version: 5.6.30
+-- Generation Time: Aug 17, 2017 at 07:21 AM
+-- Server version: 5.7.14
+-- PHP Version: 5.6.25
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -19,8 +19,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `training`
 --
-CREATE DATABASE IF NOT EXISTS `training` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `training`;
 
 -- --------------------------------------------------------
 
@@ -49,6 +47,29 @@ INSERT INTO `courses` (`id`, `name`, `description`, `author`, `price`) VALUES
 (6, 'Test Course 7', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vel diam nec ligula dapibus tincidunt ac et urna. Vestibulum dapibus id ex at tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse vulputate orci vitae est rutrum vehicula. Nullam sodales lacus vel dapibus pharetra. Cras cursus eros ut fringilla faucibus. Nunc elit arcu, tincidunt non augue eu, molestie sagittis dui. Nam dignissim vulputate augue, sed varius lorem ultricies ut. Suspendisse molestie mattis lectus, vel faucibus quam tristique sit amet.', 'Connor McCarthy', '5000.00'),
 (7, 'Test Course 9', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vel diam nec ligula dapibus tincidunt ac et urna. Vestibulum dapibus id ex at tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse vulputate orci vitae est rutrum vehicula. Nullam sodales lacus vel dapibus pharetra. Cras cursus eros ut fringilla faucibus. Nunc elit arcu, tincidunt non augue eu, molestie sagittis dui. Nam dignissim vulputate augue, sed varius lorem ultricies ut. Suspendisse molestie mattis lectus, vel faucibus quam tristique sit amet.', 'Connor McCarthy', '6000.00'),
 (8, 'Test Course 8', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In vel diam nec ligula dapibus tincidunt ac et urna. Vestibulum dapibus id ex at tempus. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse vulputate orci vitae est rutrum vehicula. Nullam sodales lacus vel dapibus pharetra. Cras cursus eros ut fringilla faucibus. Nunc elit arcu, tincidunt non augue eu, molestie sagittis dui. Nam dignissim vulputate augue, sed varius lorem ultricies ut. Suspendisse molestie mattis lectus, vel faucibus quam tristique sit amet.', 'Connor McCarthy', '9000.00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
+CREATE TABLE `orders` (
+  `id` int(9) NOT NULL,
+  `username` varchar(300) NOT NULL,
+  `courseID` int(9) NOT NULL,
+  `stripe_charge` varchar(150) NOT NULL,
+  `user_progress` int(3) NOT NULL DEFAULT '0',
+  `purchase_date` varchar(50) NOT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `orders`
+--
+
+INSERT INTO `orders` (`id`, `username`, `courseID`, `stripe_charge`, `user_progress`, `purchase_date`) VALUES
+(1, 'cono.lfc@gmail.com', 7, 'ch_1ArO2uJR2Cy9lZ4rmmaUDZsJ', 50, ''),
+(2, 'cono.lfc@gmail.com', 3, 'ch_1ArO8TJR2Cy9lZ4rjcYcgE4X', 75, 'Wednesday 16th of August 2017');
 
 -- --------------------------------------------------------
 
@@ -121,7 +142,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `email`, `password`, `firstName`, `lastName`, `stripeCustomer`, `stripeToken`, `stripeSubscription`, `stripeCard`, `addr1`, `addr2`, `addr3`, `town`, `county`, `postcode`, `mobile`, `emailSettings`, `emailNewsletter`) VALUES
-(27, 'cono.lfc@gmail.com', '6699709874cbdc49c152f690d3aa96869579d328', 'Connor', 'McCarthy', 'cus_BDElNUnXjygzcG', NULL, NULL, NULL, '34 Gleadmere', '', 'Widnes', 'Widnes', 'None (International)', 'WA8 4YQ', '078', 1, 1);
+(28, 'cono.lfc@gmail.com', 'b17cef40116aec3f52451838677b4196c02fda19', 'Conor', 'McCarthy', 'cus_BDo46QKSXYWrqE', NULL, NULL, NULL, 'Apartment 9 The Oaks', 'Hampton Court Way', '', 'Widnes', 'Cheshire', 'WA8 3ED', '07854692761', 1, 1);
 
 --
 -- Indexes for dumped tables
@@ -131,6 +152,12 @@ INSERT INTO `users` (`id`, `email`, `password`, `firstName`, `lastName`, `stripe
 -- Indexes for table `courses`
 --
 ALTER TABLE `courses`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -161,6 +188,11 @@ ALTER TABLE `users`
 ALTER TABLE `courses`
   MODIFY `id` int(5) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
 -- AUTO_INCREMENT for table `staff`
 --
 ALTER TABLE `staff`
@@ -169,7 +201,7 @@ ALTER TABLE `staff`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
