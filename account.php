@@ -173,7 +173,7 @@ $site->foot();
 <script type="text/javascript">
 	$('.default').click(function(){
 		$(this).html("<img src='./images/loading.gif' width='50px'/>");
-		$.post('./inc/ajax/default.php', {customer: '<?php echo $row['stripeCustomer'];?>',card: $(this).data("card")}, function(data){
+		$.post('./inc/ajax/default.php', {act: 'change', customer: '<?php echo $row['stripeCustomer'];?>',card: $(this).data("card")}, function(data){
 		console.log(data);
 		location.reload();
 	});
