@@ -67,15 +67,17 @@ $row = $res->fetch_assoc();
 
           	$('#editProfileInfo').click(function()
           	{
-          		$('.profile-username').html("<input type='text' name='name' class='form-control' value='<?php echo $row['name']; ?>' /><br /><br /><button class='btn btn-success' id='saveProfileInfo'>Save Profile</button>");
+          		$('.profile-username').html("<input type='text' name='name' id='name' class='form-control' value='<?php echo $row['name']; ?>' /><br /><br /><button class='btn btn-success' id='saveProfileInfo'>Save Profile</button>");
           		$('.Profileimage').html("<img class=\"profile-user-img img-responsive img-circle image\" src=\"<?php if($row['profilePictureLocation'] != "" ){echo $row['profilePictureLocation'];} else {echo "./dist/img/user.png";} ?>\" alt=\"User profile picture\"><input type='file' id='profilePic' name='file' class='form-control' />");
           	});
+
           	$(document).on("click", "#saveProfileInfo", function()
           	{
+
 				var file_data = $('#profilePic').prop('files')[0];   
 				var form_data = new FormData();                  
 				form_data.append('file', file_data);
-				alert(form_data);                             
+				                           
 				$.ajax({
 				url: './inc/ajax/upload.php', // point to server-side PHP script 
 				dataType: 'text',  // what to expect back from the PHP script, if anything
@@ -86,8 +88,20 @@ $row = $res->fetch_assoc();
 				type: 'post',
 				success: function(php_script_response){
 				console.log(php_script_response); // display response from the PHP script, if any
+        $('.Profileimage').html("<img class=\"profile-user-img img-responsive img-circle image\" src=\"<?php if($row['profilePictureLocation'] != "" ){echo $row['profilePictureLocation'];} else {echo "./dist/img/user.png";} ?>\" alt=\"User profile picture\">");
 				}
 				});
+
+        $.post('./inc/ajax/profile.php', {act: 'name', name: $('#name').val()}, function(data){
+        if(data == "Updated")
+        {
+          $('.profile-username').html($('#name').val());
+          location.reload();
+        }
+      });
+        
+        
+
 				
           	});
           	
