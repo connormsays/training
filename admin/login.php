@@ -1,12 +1,41 @@
 <?php
 require('./inc/site.php');
-if($admin->isLoggedin)
+if($admin->isLoggedin())
 {
   header("Location: index.php");
 }
+var_dump($_SESSION);
 if(isset($_POST['submit']))
 {
+$username = $mysqli->real_escape_string($_POST['username']);
+$password = $mysqli->real_escape_string($_POST['password']);
+$password = $admin->encryptPassword($username, $password);
 
+$sql = "SELECT * FROM staff where username='$username' AND password='$password'";
+$res = $mysqli->query($sql);
+if($res)
+{
+  $row = $res->fetch_assoc();
+
+  if($row['username'] == "")
+  {
+   echo "<div class=\"alert alert-danger\">
+     <button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>
+     <strong>Error!</strong> Username or password not correct;
+   </div>";
+  }else{
+    echo $row['username'] . " " . $row['name'];
+    $_SESSION['staffUser'] = $row['username'];
+    $_SESSION['staffName'] = $row['name'];
+    $_SESSION['staffID'] = $row['id'];
+    $_SESSION['staffPic'] = $row['profilePictureLocation'];
+    header("Location: index.php");
+    die();
+  }
+
+}else{
+  echo $mysqli->error;
+}
 }
 ?>
 <!DOCTYPE html>
@@ -49,18 +78,18 @@ if(isset($_POST['submit']))
 
     <form action="login.php" method="post">
       <div class="form-group has-feedback">
-        <input type="email" class="form-control" placeholder="Email">
+        <input type="email" class="form-control" name='username' placeholder="Email">
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-        <input type="password" class="form-control" placeholder="Password">
+        <input type="password" class="form-control" name='password' placeholder="Password">
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="row">
 
         <!-- /.col -->
         <div class="col-xs-4">
-          <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+          <input type="submit" name='submit' value="Sign in" class="btn btn-primary btn-block btn-flat" />
         </div>
         <!-- /.col -->
       </div>

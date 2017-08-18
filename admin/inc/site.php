@@ -1,21 +1,18 @@
 <?php
 //Admin configuration page
-error_reporting(E_ERROR | E_WARNING | E_PARSE);
-require('../inc/db.php');
+//error_reporting(E_ERROR | E_WARNING | E_PARSE);
+require(__DIR__.'/db.php');
 session_start();
-
-
+//var_dump($_SESSION);  
 class admin
 {
 
 	function top($title)
 	{
+    require('../inc/db.php');
 		$siteName = $this->getSetting('siteName');
 		$first_part = basename($_SERVER['PHP_SELF'], ".php");
-    if($_SESSION['staffName'] != "")
-    {
-      header("Location: login.php");
-    }
+
 
 ?>
 <!DOCTYPE html>
@@ -32,12 +29,15 @@ class admin
   <!-- Ionicons -->
   <link rel="stylesheet" href="bower_components/Ionicons/css/ionicons.min.css">
   <!-- Theme style -->
-  <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+  <link rel="stylesheet" href="dist/css/AdminLTE.css">
   <!-- AdminLTE Skins. We have chosen the skin-blue for this starter
         page. However, you can choose any other skin. Make sure you
         apply the skin class to the body tag so the changes take effect. -->
   <link rel="stylesheet" href="dist/css/skins/skin-blue.min.css">
-
+<script
+  src="https://code.jquery.com/jquery-3.2.1.js"
+  integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+  crossorigin="anonymous"></script>
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -89,7 +89,7 @@ class admin
                     <a href="#">
                       <div class="pull-left">
                         <!-- User Image -->
-                        <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                        <img src="<?php if($_SESSION['staffPic']!= "" ){echo $_SESSION['staffPic'];} else {echo "./dist/img/user.png";} ?>" class="img-circle" alt="User Image">
                       </div>
                       <!-- Message title and timestamp -->
                       <h4>
@@ -174,42 +174,36 @@ class admin
             <!-- Menu Toggle Button -->
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <!-- The user image in the navbar-->
-              <img src="dist/img/user2-160x160.jpg" class="user-image" alt="User Image">
+              <img src="<?php if($_SESSION['staffPic']!= "" ){echo $_SESSION['staffPic'];} else {echo "./dist/img/user.png";} ?>" class="user-image" alt="User Image">
               <!-- hidden-xs hides the username on small devices so only the image appears. -->
-              <span class="hidden-xs">Alexander Pierce</span>
+              <span class="hidden-xs"><?php echo $_SESSION['staffName']; ?></span>
             </a>
             <ul class="dropdown-menu">
               <!-- The user image in the menu -->
               <li class="user-header">
-                <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                <img src="<?php if($_SESSION['staffPic']!= "" ){echo $_SESSION['staffPic'];} else {echo "./dist/img/user.png";} ?>" class="img-circle" alt="User Image">
 
                 <p>
-                  Alexander Pierce - Web Developer
-                  <small>Member since Nov. 2012</small>
+                  <?php echo $_SESSION['staffName']; ?>
+                 
                 </p>
               </li>
               <!-- Menu Body -->
               <li class="user-body">
-                <div class="row">
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Followers</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Sales</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Friends</a>
-                  </div>
-                </div>
-                <!-- /.row -->
+                <?php
+                $sql = "SELECT count(id) AS courseCount FROM courses WHERE author = '{$_SESSION['staffID']}'";
+                $res = $mysqli->query($sql);
+                $row = $res->fetch_assoc();
+                echo "Courses Created: <strong>" . $row['courseCount'] . "</strong>";
+                ?>
               </li>
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
+                  <a href="profile.php" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                  <a href="logout.php" class="btn btn-default btn-flat">Sign out</a>
                 </div>
               </li>
             </ul>
@@ -231,10 +225,10 @@ class admin
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel">
         <div class="pull-left image">
-          <img src="dist/img/user2-160x160.jpg" class="img-circle" alt="User Image">
+          <img src="<?php if($_SESSION['staffPic']!= "" ){echo $_SESSION['staffPic'];} else {echo "./dist/img/user.png";} ?>" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>Alexander Pierce</p>
+          <p><?php echo $_SESSION['staffName']; ?></p>
           <!-- Status -->
 
         </div>
@@ -292,10 +286,10 @@ class admin
   <footer class="main-footer">
     <!-- To the right -->
     <div class="pull-right hidden-xs">
-      Anything you want
+      Powered by TrainingSoft
     </div>
     <!-- Default to the left -->
-    <strong>Copyright &copy; 2016 <a href="#">Company</a>.</strong> All rights reserved.
+    <strong>Copyright &copy;  <a href="#"><?php echo $this->getSetting("siteName"); ?></a>.</strong> All rights reserved.
   </footer>
 
   <!-- Control Sidebar -->
@@ -426,6 +420,14 @@ function isloggedin()
     return true;
   }
 }
+
+  function encryptPassword($username, $pass)
+  {
+    $salt = sha1($username);
+    $pass = sha1($pass);
+    $pass2 = sha1($salt . $pass);
+    return $pass2;
+  }
 
 
 

@@ -22,7 +22,7 @@ $site->top("Purchase a new course");
 
 
 				<?php
-				$sql = "SELECT * FROM courses";
+				$sql = "SELECT courses.name as CourseName, courses.description AS description, courses.price as price, courses.id as id, staff.name as StaffName FROM courses JOIN staff on courses.author = staff.id";
 				$res = $mysqli->query($sql);
 				$i =1;
 				while($row = $res->fetch_assoc())
@@ -31,7 +31,7 @@ $site->top("Purchase a new course");
 					{
 						echo "<div class='row'>";
 					}
-					echo "<div class=\"col-xs-12 col-sm-4 col-md-4 col-lg-4\"><div class='row'><div class='course'><h1>" . $row['name'] . "<span class='author'><i> - ".$row['author']."</i></span></h1><br />".$row['description']."<div class='price'>&pound;".$row['price']."<br /><a  class='btn btn-primary' href='./purchase.php?cid=".$row['id']."'>Purchase Now</a></div></div></div></div>";
+					echo "<div class=\"col-xs-12 col-sm-4 col-md-4 col-lg-4\"><div class='row'><div class='course'><h1>" . $row['CourseName'] . "<span class='author'><i> - ".$row['StaffName']."</i></span></h1><br />".$row['description']."<div class='price'>&pound;".$row['price']."<br /><a  class='btn btn-primary' href='./purchase.php?cid=".$row['id']."'>Purchase Now</a></div></div></div></div>";
 					if($i == 3)
 					{
 						echo "</div>";
