@@ -255,6 +255,9 @@ class admin
                 <li class="header">Courses</li>
         <li class='<?php if ($first_part=="newcourse") {echo "active"; } ?>'><a href="newcourse.php"><i class="fa fa-plus"></i> <span>Create a Course</span></a></li>
         <li class='<?php if ($first_part=="managecourse") {echo "active"; } ?>'><a href="managecourse.php"><i class="fa fa-pencil-square-o"></i> <span>Manage Courses</span></a></li>
+        <li class="header">Courses</li>
+        <li class='<?php if ($first_part=="addtopic") {echo "active"; } ?>'><a href="addtopic.php"><i class="fa fa-folder-open-o"></i> <span>Create a topic</span></a></li>
+        <li class='<?php if ($first_part=="managetopic") {echo "active"; } ?>'><a href="managetopic.php"><i class="fa fa-folder-o"></i> <span>Manage Topics</span></a></li>
          <li class="header">Settings</li>
           <li class='<?php if ($first_part=="settings") {echo "active"; } ?>'><a href="settings.php"><i class="fa fa-cog"></i> <span>System Settings</span></a></li>
       </ul>

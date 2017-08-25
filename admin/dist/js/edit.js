@@ -42,3 +42,41 @@ $(document).on("click", "#saveCourseInfo", function ()
 	//Allow the user to click away. 
 	window.onbeforeunload = null;
 });
+
+$('.deleteModule').click(function()
+{
+	 var $tr = $(this).closest('tr');
+	if (confirm("Are you sure you wish to delete this module?"))
+	{    		//Post the data to the save form
+		$.post('./dist/js/ajax/editCourse.php', {act: 'deleteModule', id: $(this).data('id')}, function(data){
+		if(data == "Updated")
+		{
+			$tr.find('td').fadeOut(1000,function(){ 
+                            $tr.remove();                    
+                        }); 
+		}
+   
+    });
+	}
+
+    return false;
+});
+
+$('#saveModule').click(function()
+{
+	$('#responseMessage').html(" ");
+	var moduleName = $('#moduleName').val();
+	$.post('./dist/js/ajax/editCourse.php', {act: 'createModule', name: moduleName, id: id}, function(data){
+		if(data == "Updated")
+		{
+			$('#moduleName').val(" ");
+			$('#responseMessage').html('<span style="color:green;">Module Added</span>');
+		}
+		else
+		{
+			console.log(data);
+		}
+   
+    });
+
+});

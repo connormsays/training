@@ -47,7 +47,7 @@ if(isset($_GET['c']))
 	<strong>Description : </strong>
 	<div id='courseDesc'><?php echo $row['description']; ?></div>
 	</div>
-	<div class='boxTitle'>Modules</div>
+	<div class='boxTitle'>Modules <div style='float:right; margin-top: -5px;'><button class='btn btn-success' data-toggle="modal" href='#modal-id'>Create</button></div></div>
 	<div class='infoBox'>
 	<table class='table table-striped table-responsive'>
 	<thead>
@@ -58,7 +58,7 @@ if(isset($_GET['c']))
 		$resm = $mysqli->query($sqlm);
 		while($rowm = $resm->fetch_assoc())
 		{
-			echo "<tr><td>{$rowm['name']}</td><td style='text-align: right;'><button class='btn btn-default' id='edit' data-id='{$rowm['module_id']}'>Edit</button> <button class='btn btn-danger' id='delete' data-id='{$rowm['module_id']}'>Delete</button></td></tr>";
+			echo "<tr><td>{$rowm['name']}</td><td style='text-align: right;'><button class='btn btn-default editModule' id='edit' data-id='{$rowm['module_id']}'>Edit</button> <button class='btn btn-danger deleteModule' id='delete' data-id='{$rowm['module_id']}'>Delete</button></td></tr>";
 		}
 		?>
 	</tbody>
@@ -68,8 +68,30 @@ if(isset($_GET['c']))
 }
 $admin->footer();
 ?>
+<div class="modal fade" id="modal-id">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Create Modules</h4>
+			</div>
+			<div class="modal-body">
+			<div id='responseMessage'>
+			
+			</div>
+				<input type='text' name='moduleName' class='form-control' id='moduleName' placeholder="Module Name" /><br /><button class='btn btn-primary' id='saveModule'>Save</button> 
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				
+			</div>
+		</div>
+	</div>
+</div>
 <script type="text/javascript">
 	var price = <?php echo $row['price']; ?>;
 	var id = <?php echo $courseID; ?>;
 </script>
 <script type="text/javascript" src='./dist/js/edit.js'></script>
+
+
